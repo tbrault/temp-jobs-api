@@ -4,6 +4,8 @@ import "express-async-errors";
 import helmet from "helmet";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
+import swaggerUI from "swagger-ui-express";
+import YAML from "yamljs";
 
 import validateAuthentication from "./middlewares/auth.js";
 import authRouter from "./routes/auth.js";
@@ -11,6 +13,8 @@ import jobsRouter from "./routes/jobs.js";
 import getNotFoundPage from "./middlewares/page-not-found.js";
 import handleErrors from "./middlewares/error-handler.js";
 import connectDb from "./db/connect.js";
+
+const swaggerDocument = YAML.load("./swagger.yaml");
 
 const app = express();
 dotenv.config();
@@ -26,6 +30,12 @@ app.use(
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.send("<h1>Jobs API</h1><a href='/api-docs'>Documentation</a>");
+});
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/jobs", validateAuthentication, jobsRouter);
 app.use(getNotFoundPage);
