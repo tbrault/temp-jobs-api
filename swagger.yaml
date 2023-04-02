@@ -5,7 +5,7 @@ info:
   contact: {}
   version: "1.0"
 servers:
-  - url: https://temp-jobs-api-p1fv.onrender.com//api/v1
+  - url: https://temp-jobs-api-p1fv.onrender.com/api/v1
     variables: {}
 paths:
   /auth/register:
